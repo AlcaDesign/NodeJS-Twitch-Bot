@@ -14,9 +14,10 @@ var clientSender,          // Used to send messages to Twitch channel
     coolDown,              // Cooldown ms, time to wait before processing any new sendToChat msgs
     botSpeaker,            // Sends delayed queued messages to channel
     channelSpeakers,
-    whisperSpeake,
-    whisperSpeakers
-
+    whisperSpeaker,
+    whisperSpeakers,
+    userWhisper,
+    userWhispers;
 init();
 
 function init() {
@@ -28,6 +29,7 @@ function init() {
     currentViewers = [];
     channelSpeakers = {};
     whisperSpeakers = {};
+    userWhispers = {};
 
     // Connect the client to the server
     setupConnection(config.CHANNELS(), config.USERNAME(), config.OAUTH());
@@ -97,7 +99,9 @@ function setupIncommingEventHandlers(client) {
     client.addListener("chat", function(channel, user, message, self) {
         onChat(channel, user, message, self);
     });
-
+    client.addListener("whisper", function(user, message) {
+        onWhisper(user, message);
+    });
     //NOTE: Handling joins and leaves using Twitch TMI REST endpoint
     client.addListener("join", function(channel, username) {
         onJoin(channel, username);
@@ -134,6 +138,13 @@ function onAction(channel, user, message, self) {
  */
  function onChat(channel, user, message, self) {
      // console.log("Chat:", user["username"] !== undefined ? user["username"] : "SomeUser", "said:", message);
+     if(message === "!test")
+        botSpeak(channel, user["username"] + " no.. just no.")
+}
+function onChat(channel, user, message, self) {
+    //console.log("Chat:", user["username"] !== undefined ? user["username"] : "SomeUser", "said:", message);
+    if(message === "!kappa")
+      botWhisper("Kappa to you too")
 }
 function isNotBot(user) {
     // Check if user or username is or is not the bot
@@ -142,12 +153,15 @@ function isNotBot(user) {
     } else {
         return user !== config.USERNAME().toLowerCase() && user['username'] !== undefined
     }
-
 }
 
 function botSpeak(channel, message){
     var channelSpeak = channelSpeakers[channel]
     channelSpeak(channel, message)
+}
+  function botWhisper(username, message){
+    var userWhisper = userWhispers[username]
+    userWhisper(username, message)
 }
 
 /**
@@ -156,10 +170,18 @@ function botSpeak(channel, message){
 * @param  {Object} user    The user that is emitting the chat message
  * @param  {string} message  The message being emitted by user
 */
-function botSpeak(channel, message){
+
+function onWhisper(user, message) {
+}
+function whisperSpeak(message, user){
     var whisperSpeak = whisperSpeakers[user]
     whisperSpeak(user, message)
-
+}
+function clientWhisper(username, message) {
+}
+function clientWhisper(message, username){
+    var clientWhisper = clientWhisper[username]
+    clientWhisper(username, message)
 }
 
 /**
