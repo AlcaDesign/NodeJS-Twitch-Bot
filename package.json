@@ -3,13 +3,16 @@
   "version": "1.0.0",
   "description": "My First Chat Bot in nodejs",
   "main": "app.js",
+  "author": "MrDemonWolf",
+  "license": "MIT",
   "dependencies": {
-    "tmi.js": "^0.0.29"
+    "tmi.js": "^0.0.29",
+    "underscore": "^1.8.3",
+    "request": "^2.67.0",
+    "fs": "0.0.2"
   },
   "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "MrDemonWolf",
-  "license": "MIT"
+  }
 }
