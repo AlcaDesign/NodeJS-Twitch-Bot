@@ -50,7 +50,6 @@ function setupConnection(channels, username, password) {
                 debug: true
             },
             connection: {
-                random: "chat",
                 reconnect: true
             },
             identity: {
@@ -90,18 +89,12 @@ function setupIncommingEventHandlers(client) {
      * 	Add listeners for all of the Twitch chat events supported by the tmi library
      */
 
-    client.addListener("action", function(channel, user, message, self) {
-        onAction(channel, user, message, self);
-     });
+    client.addListener("action", onAction);
 
-    client.addListener("chat", function(channel, user, message, self) {
-        onChat(channel, user, message, self);
-    });
+    client.addListener("chat", onChat);
 
     //NOTE: Handling joins and leaves using Twitch TMI REST endpoint
-    client.addListener("join", function(channel, username) {
-        onJoin(channel, username);
-    });
+    client.addListener("join", onJoin);
   }
 
 /**
@@ -168,9 +161,9 @@ function botSpeak(channel, message){
  * @param  {string} channel  The channel that is being joined
  * @param  {Object} user The username that is joining the channel
  */
-function onJoin(channel, username) {
+function onJoin(channel, username, self) {
 
-    if (isNotBot(username)) {
+    if (!self) {
         console.log("User:", username, "has joined channel", channel);
 
         // Check if user is already in list of currentViewers before adding to newViewers

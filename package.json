@@ -6,7 +6,7 @@
   "author": "MrDemonWolf",
   "license": "MIT",
   "dependencies": {
-    "tmi.js": "^0.0.29",
+    "tmi.js": "^1.1.1",
     "underscore": "^1.8.3",
     "request": "^2.67.0",
     "fs": "0.0.2"
